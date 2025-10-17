@@ -4,6 +4,6 @@ object Assets {
     // Characters
     const val CHAR_TORI_IDLE = "Character and Portrait/Character/Pre-made/Tori/idle.png"
 
-    // Tiles
-    const val TILESET_GRASS_SUMMER = "Farm/Tileset/Modular/Tileset Grass Summer.png"
+    // Map
+    const val MAP_FARM = "Maps/BaseFarm.tmx"
 }

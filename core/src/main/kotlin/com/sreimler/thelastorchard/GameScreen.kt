@@ -3,6 +3,7 @@ package com.sreimler.thelastorchard
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.sreimler.thelastorchard.assets.GameAssets
 import ktx.app.KtxScreen
@@ -17,6 +18,9 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
 
     private val batch = SpriteBatch()
 
+    // Map renderer
+    private lateinit var mapRenderer: OrthogonalTiledMapRenderer
+
     // Fixed timestep: 60 updates per second
     private val fixedDeltaTime = 1f / 60f
     private var accumulator = 0f
@@ -27,7 +31,7 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
     }
 
     override fun show() {
-        super.show()
+        mapRenderer = OrthogonalTiledMapRenderer(assets.farmMap)
         log.info { "GameScreen shown" }
     }
 
@@ -52,9 +56,14 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
     private fun draw() {
         // Clear screen to black
         clearScreen(red = 0f, green = 0f, blue = 0f, alpha = 1f)
-
         viewport.apply()
         camera.update()
+
+        // Render background first
+        mapRenderer.setView(camera)
+        mapRenderer.render()
+
+
         batch.projectionMatrix = camera.combined
 
         val characterX = viewport.worldWidth / 2f
@@ -62,12 +71,6 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
 
         batch.use {
             it.draw(assets.charToriIdleFront, characterX, characterY)
-
-            for (x in 0 until 5) {
-                for (y in 0 until 5) {
-                    it.draw(assets.tileGrassSummer, x * 64f, y * 64f)
-                }
-            }
         }
     }
 
@@ -77,6 +80,7 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
     }
 
     override fun dispose() {
+        mapRenderer.dispose()
         batch.disposeSafely()
         log.debug { "Resources disposed" }
     }
