@@ -1,4 +1,4 @@
-package com.sreimler.thelastorchard
+package com.sreimler.thelastorchard.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
@@ -8,6 +8,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.sreimler.thelastorchard.assets.GameAssets
+import com.sreimler.thelastorchard.core.Position
+import com.sreimler.thelastorchard.input.KeyboardInput
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -172,21 +174,11 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
     }
 
     companion object {
-        private const val MOVE_SPEED = 400f // pixels per second
+        private const val MOVE_SPEED = 100f // pixels per second
         private const val TILE_SIZE = 16f
     }
 }
 
-data class KeyboardInput(
-    var w: Boolean,
-    var a: Boolean,
-    var s: Boolean,
-    var d: Boolean
-)
 
 fun Boolean.toFloat(): Float = if (this) 1f else 0f
 
-data class Position(
-    var x: Float,
-    var y: Float
-)

@@ -1,6 +1,7 @@
 package com.sreimler.thelastorchard
 
 import com.sreimler.thelastorchard.assets.GameAssets
+import com.sreimler.thelastorchard.screens.GameScreen
 import kotlinx.coroutines.launch
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
