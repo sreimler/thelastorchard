@@ -30,8 +30,21 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
         camera.position.set(320f, 180f, 0f)
     }
 
+    // Calculate map size from tmx properties
+    val mapProperties = assets.farmMap.properties
+    val mapWidth = mapProperties.get("width", Int::class.java) * 16f
+    val mapHeight = mapProperties.get("height", Int::class.java) * 16f
+
+    // Initial character position
+    private var characterX = mapWidth / 2f
+    private var characterY = mapHeight / 2f
+
     override fun show() {
         mapRenderer = OrthogonalTiledMapRenderer(assets.farmMap)
+
+        // Center camera on map
+        camera.position.set(mapWidth / 2f, mapHeight / 2f, 0f)
+
         log.info { "GameScreen shown" }
     }
 
@@ -63,12 +76,7 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
         mapRenderer.setView(camera)
         mapRenderer.render()
 
-
         batch.projectionMatrix = camera.combined
-
-        val characterX = viewport.worldWidth / 2f
-        val characterY = viewport.worldHeight / 2f
-
         batch.use {
             it.draw(assets.charToriIdleFront, characterX, characterY)
         }
