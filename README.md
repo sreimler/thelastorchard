@@ -1,33 +1,62 @@
-# The Last Orchard
+# The Last Orchard 🍎✨
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+Ever wondered what it's like to build a game from scratch? Me too. This is my exploration into 2D pixel art game development using Kotlin and libGDX.
 
-This project was generated with a Kotlin project template that includes Kotlin application launchers and [KTX](https://libktx.github.io/) utilities.
+## What's This?
 
-## Platforms
+A tiny farm simulator where you (eventually) grow crops, tend orchards, and maybe pet a chicken or two. 🐔 Right now, you can walk around a grassy map with some water and trees. Riveting stuff!
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+## What I'm Learning
 
-## Gradle
+🎮 **Game loops** - Update, render, repeat (60 times per second)  
+🗺️ **Tile-based worlds** - Painting maps in Tiled, rendering them efficiently  
+⚡ **Real-time physics** - Delta time, velocity, vector math  
+🎨 **Asset pipelines** - Loading textures, handling spritesheets, async coroutines  
+📦 **Pragmatic architecture** - Not Clean Architecture, but clean *enough*  
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+## Tech Stack
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+- **Kotlin** (because of course)
+- **[libGDX](https://libgdx.com/)** + **[KTX](https://libktx.github.io/)** – Kotlin-first game framework
+- **Tiled** (map editor)
+- **Gradle** (build system)
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+## Current State
+
+You can press WASD to walk around. The camera follows you. Thrilling, I know. 😅
+
+More features coming as I figure out collision detection, animations, and why my character sprite is slightly off-center.
+
+## Running the Game
+
+**Quick start:**
+
+./gradlew lwjgl3:run
+
+**Build a runnable JAR:**
+
+./gradlew lwjgl3:jar
+(located at lwjgl3/build/libs/)
+
+**Other useful commands:**
+- `./gradlew build` – Build all projects
+- `./gradlew clean` – Remove build folders
+- `./gradlew idea` – Generate IntelliJ project files
+- `./gradlew test` – Run unit tests
+
+On Windows, use `gradlew.bat` instead of `./gradlew`.
+
+## Project Structure
+
+- **core** – Main game logic (cross-platform)
+- **lwjgl3** – Desktop launcher using LWJGL3
+
+Tested on macOS. Should work anywhere Java runs.
+
+## Asset Credits
+
+This project uses pixel art assets by **[EmanuelleDev](https://emanuelledev.itch.io/)**.
+
+---
+
+*Not a real game (yet?). Just me poking around outside my usual Android app comfort zone.*
