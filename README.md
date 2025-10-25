@@ -2,17 +2,21 @@
 
 Ever wondered what it's like to build a game from scratch? Me too. This is my exploration into 2D pixel art game development using Kotlin and libGDX.
 
+![Gameplay Screenshot](screenshots/gameplay.png)
+
 ## What's This?
 
-A tiny farm simulator where you (eventually) grow crops, tend orchards, and maybe pet a chicken or two. 🐔 Right now, you can walk around a grassy map with some water and trees. Riveting stuff!
+A tiny farm simulator where you (eventually) grow crops, tend orchards, and maybe pet a chicken or two. 🐔 Right now, you can walk around a grassy map with some water and trees. The character can't walk through solid obstacles and water, which is more exciting than it sounds. 🤠
 
 ## What I'm Learning
 
 🎮 **Game loops** - Update, render, repeat (60 times per second)  
 🗺️ **Tile-based worlds** - Painting maps in Tiled, rendering them efficiently  
-⚡ **Real-time physics** - Delta time, velocity, vector math  
+⚡ **Real-time physics** - Delta time, velocity, vector math
+💥 **Collision detection** - Collision with Tiled object layers
 🎨 **Asset pipelines** - Loading textures, handling spritesheets, async coroutines  
 📦 **Pragmatic architecture** - Not Clean Architecture, but clean *enough*  
+🐛 **Debug tooling** – Runtime toggles, build configurations   
 
 ## Tech Stack
 
@@ -23,15 +27,19 @@ A tiny farm simulator where you (eventually) grow crops, tend orchards, and mayb
 
 ## Current State
 
-You can press WASD to walk around. The camera follows you. Thrilling, I know. 😅
+You can press WASD to walk around. The camera follows you. Collision detection prevents you from walking through trees and drowning in water. Thrilling, I know. 😅 Press F4 to see debug collision boxes.
 
-More features coming as I figure out collision detection, animations, and why my character sprite is slightly off-center.
+More features coming as I figure out animations and NPCs.
 
 ## Running the Game
 
 **Quick start:**
 
 ./gradlew lwjgl3:run
+
+**Debug mode (with collision boxes visible by default):**
+
+./gradlew lwjgl3:runDebug
 
 **Build a runnable JAR:**
 
