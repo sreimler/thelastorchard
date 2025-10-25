@@ -2,9 +2,14 @@ package com.sreimler.thelastorchard.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.maps.MapLayer
+import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.sreimler.thelastorchard.assets.GameAssets
@@ -51,11 +56,20 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
         (mapHeight - characterHeight / 2).coerceAtLeast(0f) // // On the top of the map we'll leave characterHeight/2 more space
     )
 
+    // Collision rectangles
+    private val collisionRects = mutableListOf<Rectangle>()
+
+    // Draw objects for debugging, e.g. collision boxes
+    private val debugShapeRenderer = ShapeRenderer()
+
     override fun show() {
         mapRenderer = OrthogonalTiledMapRenderer(assets.farmMap)
 
         // Calculate initial viewport dimensions
         updateViewportDimensions()
+
+        // Load static collision objects
+        loadCollisionRects()
 
         // Center camera on character (which is initally centered on the map)
         val cameraPos = getCenteredCameraFor(characterPosition)
@@ -96,16 +110,19 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
             movement.nor() // Normalize for diagonal movement
 
             // Calculate position after movement
-            characterPosition.x += movement.x * MOVE_SPEED * dt
-            characterPosition.y += movement.y * MOVE_SPEED * dt
+            val newPosition = Position(
+                characterPosition.x + movement.x * MOVE_SPEED * dt,
+                characterPosition.y + movement.y * MOVE_SPEED * dt
+            )
 
-            // Ensure map boundaries
-            characterPosition.clampToMapBounds()
+            if (!wouldCollide(newPosition)) {
+                // Set position, ensuring map boundaries
+                characterPosition = newPosition.apply { clampToMapBounds() }
 
-            // Calculate corresponding camera position
-            val cameraPosition = getCenteredCameraFor(characterPosition)
-            camera.position.set(cameraPosition.x, cameraPosition.y, 0f)
-//        log.info { "${characterWidth} ${characterHeight}x char: $characterX, map: $mapWidth, vp.screen: ${viewport.screenWidth}, vp.world: ${viewport.worldWidth}" }
+                // Calculate corresponding camera position
+                val cameraPosition = getCenteredCameraFor(characterPosition)
+                camera.position.set(cameraPosition.x, cameraPosition.y, 0f)
+            }
         }
     }
 
@@ -128,6 +145,9 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
                 characterPosition.y - characterHeight / 2f
             )
         }
+
+        // For debugging only
+        drawCollisionBoxes()
     }
 
     /**
@@ -136,6 +156,67 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
     private fun Position.clampToMapBounds() {
         x = x.coerceIn(characterWidth / 2f, maxCharacterPosition.x)
         y = y.coerceIn(characterHeight / 2f, maxCharacterPosition.y)
+    }
+
+    /**
+     * Load all collision rectangles from the corresponding map layer and store in [collisionRects].
+     */
+    private fun loadCollisionRects() {
+        val collisionLayer = assets.farmMap.layers.get("Collision") as MapLayer
+
+        for (obj in collisionLayer.objects) {
+            if (obj is RectangleMapObject) {
+                val rect = obj.rectangle
+                collisionRects.add(rect)
+                log.debug { "Found collision rect with dimensions ${rect.width}x${rect.height} and center ${rect.x}|${rect.y}" }
+            }
+        }
+
+        log.info { "Loaded ${collisionRects.size} collision rectangles." }
+    }
+
+    private fun wouldCollide(position: Position): Boolean {
+        // Calculate character collision box
+        val characterRect = Rectangle(
+            position.x - COLLISION_WIDTH / 2 + COLLISION_OFFSET_X,
+            position.y - COLLISION_HEIGHT / 2 + COLLISION_OFFSET_Y,
+            COLLISION_WIDTH,
+            COLLISION_HEIGHT
+        )
+
+        for (rect in collisionRects) {
+            if (characterRect.x < rect.x + rect.width &&
+                characterRect.x + characterRect.width > rect.x &&
+                characterRect.y < rect.y + rect.height &&
+                characterRect.y + characterRect.height > rect.y
+            ) return true
+        }
+
+        return false
+    }
+
+    private fun drawCollisionBoxes() {
+        debugShapeRenderer.projectionMatrix = camera.combined
+        debugShapeRenderer.begin(ShapeRenderer.ShapeType.Line)
+
+        // Draw red map collision rects
+        debugShapeRenderer.color = Color.RED
+        for (rect in collisionRects) {
+            debugShapeRenderer.rect(rect.x, rect.y, rect.width, rect.height)
+        }
+
+        // Draw character collision box in green
+        val characterRect = Rectangle(
+            characterPosition.x - COLLISION_WIDTH / 2 + COLLISION_OFFSET_X,
+            characterPosition.y - COLLISION_HEIGHT / 2 + COLLISION_OFFSET_Y,
+            COLLISION_WIDTH,
+            COLLISION_HEIGHT
+        )
+
+        debugShapeRenderer.color = Color.GREEN
+        debugShapeRenderer.rect(characterRect.x, characterRect.y, characterRect.width, characterRect.height)
+
+        debugShapeRenderer.end()
     }
 
     /**
@@ -170,12 +251,20 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
     override fun dispose() {
         mapRenderer.dispose()
         batch.disposeSafely()
+        debugShapeRenderer.dispose()
         log.debug { "Resources disposed" }
     }
 
     companion object {
-        private const val MOVE_SPEED = 100f // pixels per second
+        private const val MOVE_SPEED = 200f // pixels per second
         private const val TILE_SIZE = 16f
+
+        // Character collision box dimensions (smaller than sprite)
+        private const val COLLISION_WIDTH = 12f
+        private const val COLLISION_HEIGHT = 8f
+        private const val COLLISION_OFFSET_X = 0.5f
+        private const val COLLISION_OFFSET_Y = -6f
+
     }
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="51">
  <tileset firstgid="1" name="ALL props seasons" tilewidth="16" tileheight="16" tilecount="264" columns="22">
   <image source="../Farm/Tileset/Modular/ALL props seasons.png" width="352" height="192"/>
  </tileset>
@@ -112,4 +112,19 @@
 0,357,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="3" name="Collision">
+  <object id="9" x="0" y="576" width="480" height="64"/>
+  <object id="11" x="800" y="336" width="160" height="112"/>
+  <object id="12" x="480" y="336" width="288" height="112"/>
+  <object id="13" x="480" y="448" width="480" height="192"/>
+  <object id="38" x="793.682" y="132.162" width="13.5186" height="9.96105"/>
+  <object id="39" x="747.968" y="196.909" width="9.78317" height="7.82654"/>
+  <object id="40" x="579.473" y="285.218" width="22.1351" height="12.8952"/>
+  <object id="42" x="489.645" y="259.192" width="13.1123" height="10.2384"/>
+  <object id="43" x="313.607" y="420.49" width="13.2568" height="9.42478"/>
+  <object id="44" x="217.312" y="228.34" width="13.8142" height="9.57704"/>
+  <object id="45" x="59.9301" y="372.801" width="10.134" height="8.27024"/>
+  <object id="46" x="508.068" y="99.2122" width="10.4268" height="10.0055"/>
+  <object id="50" x="768" y="437.349" width="32.0718" height="10.6514"/>
+ </objectgroup>
 </map>
