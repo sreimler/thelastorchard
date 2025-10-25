@@ -18,6 +18,7 @@ apply plugin: 'org.jetbrains.kotlin.jvm'
 
 
 import io.github.fourlastor.construo.Target
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
 mainClassName = 'com.sreimler.thelastorchard.lwjgl3.Lwjgl3Launcher'
@@ -28,7 +29,7 @@ java.targetCompatibility = 17
 if (JavaVersion.current().isJava9Compatible()) {
         compileJava.options.release.set(17)
 }
-kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+kotlin.compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
 
 dependencies {
   implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
@@ -50,6 +51,36 @@ run {
   workingDir = rootProject.file('assets').path
 // You can uncomment the next line if your IDE claims a build failure even when the app closed properly.
   //setIgnoreExitValue(true)
+
+  if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
+}
+
+// Run in debug mode with debug flags enabled
+tasks.register('runDebug', JavaExec) {
+  group = 'application'
+  description = 'Runs the game in debug mode with debug rendering enabled'
+
+  mainClass = project.mainClassName
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = rootProject.file('assets').path
+
+  // Pass debug flag to the application
+  systemProperty 'debug', 'true'
+
+  if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
+}
+
+// Run in release mode with debug flags disabled
+tasks.register('runRelease', JavaExec) {
+  group = 'application'
+  description = 'Runs the game in release mode (no debug rendering)'
+
+  mainClass = project.mainClassName
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = rootProject.file('assets').path
+
+  // Explicitly disable debug
+  systemProperty 'debug', 'false'
 
   if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
 }

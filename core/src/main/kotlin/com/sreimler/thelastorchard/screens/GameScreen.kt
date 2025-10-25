@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.sreimler.thelastorchard.assets.GameAssets
+import com.sreimler.thelastorchard.core.DebugConfig
 import com.sreimler.thelastorchard.core.Position
 import com.sreimler.thelastorchard.input.KeyboardInput
 import ktx.app.KtxScreen
@@ -124,6 +125,8 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
                 camera.position.set(cameraPosition.x, cameraPosition.y, 0f)
             }
         }
+
+        DebugConfig.processInput()
     }
 
     private fun draw() {
@@ -147,7 +150,9 @@ class GameScreen(private val assets: GameAssets) : KtxScreen {
         }
 
         // For debugging only
-        drawCollisionBoxes()
+        if (DebugConfig.drawCollisionBoxes) {
+            drawCollisionBoxes()
+        }
     }
 
     /**
